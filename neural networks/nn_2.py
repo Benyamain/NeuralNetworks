@@ -4,7 +4,7 @@ import numpy as np
 
 dataset = keras.datasets.imdb
 # Only take words that are the 10,000 most frequent
-(train_data, train_labels), (test_data, test_labels) = dataset.load_data(num_words = 10000)
+(train_data, train_labels), (test_data, test_labels) = dataset.load_data(num_words = 88000)
 # print(train_data[0])
 
 # Finding the mappings for the integer values
@@ -54,8 +54,9 @@ def decode_review(text):
 # made possible by modifying the weight(s) and biase(s).
 # Output layer: A single output (0 or 1)
 # Dense layers is a fully-connected network: A neuron from one layer is connected to another layer neuron exactly one time
+'''
 model = keras.Sequential()
-model.add(keras.layers.Embedding(10000, 16))
+model.add(keras.layers.Embedding(88000, 16))
 model.add(keras.layers.GlobalAveragePooling1D())
 model.add(keras.layers.Dense(16, activation = 'relu'))
 # Normalizes the data between values 0 and 1
@@ -73,11 +74,23 @@ y_train = train_labels[10000:]
 # Batch size: How many reviews are we loading at once
 fit_model = model.fit(x_train, y_train, epochs = 40, batch_size = 512, validation_data = (x_validation_data, y_validation_data), verbose = 1)
 results = model.evaluate(test_data, test_labels)
+print('Results: ', results)
 
-test_review = test_data[0]
+# Extension for a saved model in keras and tensorflow
+# Save it in binary. Doing so would save time to keep retraining the model
+model.save('./neural networks/model.h5') '''
+
+model = keras.models.load_model('./neural networks/model.h5')
+with open('./neural networks/review.txt', encoding = 'utf-8') as f:
+    # Can read multiple lines (or reviews in this case) but for right now we only have one
+    for line in f.readlines():
+        new_line = line.replace(',', '').replace('.', '').replace('(', '').replace(')', '').replace(':', '')
+
+
+# test_review = test_data[0]
 # model.predict() does not accept normal lists so use np.array()
-prediction = model.predict(np.array([test_review]))
-print('Review: ', decode_review(test_review))
-print('\nPrediction: ', str(prediction[0]))
-print('\nActual: ', str(test_labels[0]))
-print('\nResults: ', results)
+# prediction = model.predict(np.array([test_review]))
+# print('Review: ', decode_review(test_review))
+# print('\nPrediction: ', str(prediction[0]))
+# print('\nActual: ', str(test_labels[0]))
+# print('\nResults: ', results)
