@@ -46,6 +46,14 @@ def decode_review(text):
 # looking at.
 # Word embeddings become learned (get 'great' and 'good' closer together [smaller angle])
 # When fed into the network, the output for those words would be similar
+# N-dimensions represents the number of coefficients to each vector (Ax + By + Cz + ... + ...)
+# However this is a lot of dimensions. Therefore, we should scale it down by using GlobalAveragePooling.
+# Average layer: Takes whatever n-dimension our dataset is in and puts it in a lower dimension
+# Dense layer: Add an arbitary amount of neurons for your hidden layer (15 to 20 percent of your input layer neuron size): 16 neurons
+# The dense layer will look at these patterns of words and attempt to classify them as either positive or negative movie reviews
+# made possible by modifying the weight(s) and biase(s).
+# Output layer: A single output (0 or 1)
+# Dense layers is a fully-connected network: A neuron from one layer is connected to another layer neuron exactly one time
 model = keras.Sequential()
 model.add(keras.layers.Embedding(10000, 16))
 model.add(keras.layers.GlobalAveragePooling1D())
