@@ -34,6 +34,18 @@ def decode_review(text):
 # print(decode_review(test_data[0]))
 # Can add the layers into sequential as a list but doing so through add achieves the same goal
 # Final output of this model: 'Positive' or 'Negative' movie review (between 0 and 1)
+
+# 'Have a great day' : 'Have a good day'
+# [0, 1, 2, 3] : [0, 1, 4, 3]
+# As an example, these phrases in our dataset are integer encoded in a list
+# Although 2 and 4 are different, the phrases still hold similar meanings. Thus, embedding layer is introduced.
+# Embedding layer groups words in a similar manner to dictate which ones are similar to each other
+# Generates word vectors (16D) for each word onto a space (all of the words are drawn on this space)
+# Find the difference in the word vectors for each word based on their shared angle ; the greater the angle, the greater
+# the difference. However, we want to associate them more closely based on context: The words that surround word you are
+# looking at.
+# Word embeddings become learned (get 'great' and 'good' closer together [smaller angle])
+# When fed into the network, the output for those words would be similar
 model = keras.Sequential()
 model.add(keras.layers.Embedding(10000, 16))
 model.add(keras.layers.GlobalAveragePooling1D())
