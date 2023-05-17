@@ -35,9 +35,26 @@ model = keras.Sequential([
 
 model.compile(optimizer = 'adam', loss = 'sparse_categorical_crossentropy', metrics = ['accuracy'])
 # Epoch: How many times is the model going to see the information (see the same image)
-model.fit(train_images, train_labels, epochs = 10)
-test_loss, test_accuracy = model.evaluate(test_images, test_labels)
-print(test_accuracy)
+model.fit(train_images, train_labels, epochs = 5)
+# test_loss, test_accuracy = model.evaluate(test_images, test_labels)
+# print(test_accuracy)
+
+# Predict gives you a group of predictions so it expects for us to pass a list/array
+# Output layer is 10 neurons so we are getting 10 different values
+prediction = model.predict(test_images)
+
+# Predicting on one image
+# one_prediction = model.predict([test_images[7]])
+# List inside of a list
+# one_prediction = [[]]
+
+for i in range(5):
+    plt.grid(False)
+    plt.imshow(test_images[i], cmap = plt.cm.binary)
+    plt.xlabel('Actual: ' + class_names[test_labels[i]])
+    # Argmax gets the largest value and returns the index of that neuron
+    plt.title('Prediction: ' + class_names[np.argmax(prediction[i])])
+    plt.show()
 
 # Show an image
 # Cmap removes the 'fluff' that plt adds
