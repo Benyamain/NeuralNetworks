@@ -73,4 +73,11 @@ y_train = train_labels[10000:]
 # Batch size: How many reviews are we loading at once
 fit_model = model.fit(x_train, y_train, epochs = 40, batch_size = 512, validation_data = (x_validation_data, y_validation_data), verbose = 1)
 results = model.evaluate(test_data, test_labels)
-print(results)
+
+test_review = test_data[0]
+# model.predict() does not accept normal lists so use np.array()
+prediction = model.predict(np.array([test_review]))
+print('Review: ', decode_review(test_review))
+print('\nPrediction: ', str(prediction[0]))
+print('\nActual: ', str(test_labels[0]))
+print('\nResults: ', results)
