@@ -27,12 +27,17 @@ test_images = test_images / 255.0
 # Dense layers is a fully-connected network: A neuron from one layer is connected to another layer neuron exactly one time
 model = keras.Sequential([
     keras.layers.Flatten(input_shape = (28, 28)),
+    # Input layer
     keras.layers.Dense(128, activation = 'relu'),
     # Pick values for each output neuron that sum up to 1
     keras.layers.Dense(10, activation = 'softmax')
 ])
 
 model.compile(optimizer = 'adam', loss = 'sparse_categorical_crossentropy', metrics = ['accuracy'])
+# Epoch: How many times is the model going to see the information (see the same image)
+model.fit(train_images, train_labels, epochs = 10)
+test_loss, test_accuracy = model.evaluate(test_images, test_labels)
+print(test_accuracy)
 
 # Show an image
 # Cmap removes the 'fluff' that plt adds
