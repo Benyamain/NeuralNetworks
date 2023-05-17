@@ -80,12 +80,30 @@ print('Results: ', results)
 # Save it in binary. Doing so would save time to keep retraining the model
 model.save('./neural networks/model.h5') '''
 
+def review_encode(s):
+    # Setting a start tag
+    encoded = [1]
+    
+    for word in s:
+        if word.lower() in word_index:
+            encoded.append(word_index[word.lower()])
+        else:
+            # Unknown tag
+            encoded.append(2)
+        
+    return encoded
+
 model = keras.models.load_model('./neural networks/model.h5')
 with open('./neural networks/review.txt', encoding = 'utf-8') as f:
     # Can read multiple lines (or reviews in this case) but for right now we only have one
     for line in f.readlines():
-        new_line = line.replace(',', '').replace('.', '').replace('(', '').replace(')', '').replace(':', '')
-
+        # Strip the \n
+        new_line = line.replace(',', '').replace('.', '').replace('(', '').replace(')', '').replace(':', '').replace('\"', '').strip().split(' ')
+        encode = review_encode(new_line)
+        # Expecting a list of lists
+        encode = keras.preprocessing.sequence.pad_sequences([encode], value = word_index['<PAD>'], padding = 'post', maxlen = 256)
+        predict = model.predict(encode)
+        print('Line: ', line, '\n\nEncoded values: ', encode, '\n\nPrediction: ', predict[0])
 
 # test_review = test_data[0]
 # model.predict() does not accept normal lists so use np.array()
