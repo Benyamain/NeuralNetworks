@@ -60,3 +60,17 @@ model.add(keras.layers.GlobalAveragePooling1D())
 model.add(keras.layers.Dense(16, activation = 'relu'))
 # Normalizes the data between values 0 and 1
 model.add(keras.layers.Dense(1, activation = 'sigmoid'))
+
+model.summary()
+# Two options for the neuron: 0 or 1
+# Recall that loss calculates the difference
+model.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
+x_validation_data = train_data[:10000]
+x_train = train_data[10000:]
+y_validation_data = train_labels[:10000]
+y_train = train_labels[10000:]
+
+# Batch size: How many reviews are we loading at once
+fit_model = model.fit(x_train, y_train, epochs = 40, batch_size = 512, validation_data = (x_validation_data, y_validation_data), verbose = 1)
+results = model.evaluate(test_data, test_labels)
+print(results)
